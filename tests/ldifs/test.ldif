@@ -1,0 +1,57 @@
+version: 1
+
+#################
+# top level
+#################
+
+dn: dc=redhat,dc=com
+dc: redhat
+o: example
+objectclass: dcObject
+objectclass: organization
+
+dn: ou=users,dc=redhat,dc=com
+objectclass: organizationalUnit
+ou: users
+
+dn: ou=serviceaccounts,dc=redhat,dc=com
+objectclass: organizationalUnit
+ou: serviceaccounts
+
+#################
+# Users
+#################
+
+dn: cn=testuser,ou=users,dc=redhat,dc=com
+cn: User01
+cn: testuser
+gidnumber: 1000
+givenName: Monke
+homedirectory: /home/testuser
+mail: monke@banana.com
+objectclass: inetOrgPerson
+objectclass: posixAccount
+objectclass: shadowAccount
+sn: Perlis
+uid: testuser
+uidnumber: 1000
+userpassword: password
+
+#################
+# Service accounts
+#################
+
+dn: cn=testservice,ou=serviceaccounts,dc=redhat,dc=com
+cn: Service1
+cn: testservice
+gidnumber: 2000
+givenName: silenceawarning
+homedirectory: /home/testservice
+mail: silenceawarning
+objectclass: inetOrgPerson
+objectclass: posixAccount
+objectclass: shadowAccount
+sn: Faker
+uid: testservice
+uidnumber: 2000
+userpassword: password

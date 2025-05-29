@@ -1,0 +1,15 @@
+version: '3'
+services:
+    testldap:
+      container_name: kaminarimon_ldap
+      image: mirror.gcr.io/bitnami/openldap:2.5
+      ports:
+        - '6969:1389'
+        - '7070:1636'
+      environment:
+        - LDAP_ROOT=dc=redhat,dc=com
+        - LDAP_ADMIN_USERNAME=admin
+        - LDAP_ADMIN_PASSWORD=adminpassword
+        - LDAP_CUSTOM_LDIF_DIR=/ldifs
+      volumes:
+        - ${PWD}/ldifs:/ldifs:z

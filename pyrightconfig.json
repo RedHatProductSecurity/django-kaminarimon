@@ -1,0 +1,14 @@
+{
+  "exclude": [
+    "**/__pycache__",
+    ".venv",
+    "venv",
+    ".git",
+    "node_modules",
+    "tests/data",
+    "build",
+    "dist"
+  ],
+  "pythonVersion": "3.9",
+  "typeCheckingMode": "standard",
+}

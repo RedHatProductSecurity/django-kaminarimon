@@ -63,6 +63,16 @@ In order to protect other views with such authentication tokens, simply mark the
 authentication method as `rest_framework_simplejwt.authentication.JWTAuthentication`
 or similar as, or set it globally using `DEFAULT_AUTHENTICATION_CLASSES`.
 
+## Browser-based applications
+
+If your service will be used by browser-based applications and security of tokens
+is a concern, you can add `kaminarimon.views.refresh_token` to your
+`urls.py`, this view will accept a cookie set by
+`kaminarimon.views.krb5_obtain_token_pair_view` in order to provide a fresh
+access token without requiring the client to store/handle the refresh token.
+
+The cookie is by default httpOnly, secure and sameSite=Strict.
+
 ## Running tests
 
 ```bash

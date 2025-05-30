@@ -11,3 +11,6 @@ wheels/
 
 # uv / pyenv files
 .python-version
+
+# pyright configuration file
+pyrightconfig.json

@@ -9,10 +9,20 @@ BASE_DIR = Path(__file__).resolve().parent
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+ROOT_URLCONF = "tests.cookie_test_app.urls"
+
 INSTALLED_APPS = [
-    "django.contrib.contenttypes",
     "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
     "kaminarimon",
+    "tests.cookie_test_app",
+]
+
+MIDDLEWARE = [
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
 ]
 
 AUTHENTICATION_BACKENDS = [

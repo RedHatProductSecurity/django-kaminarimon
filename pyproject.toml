@@ -16,7 +16,7 @@ keywords = [
     "djangorestframework",
     "DRF",
 ]
-version = "0.1.0"
+version = "0.2.0"
 description = "Auth(n/z) plugin for Django using kerberos + LDAP"
 readme = "README.md"
 requires-python = ">=3.9"

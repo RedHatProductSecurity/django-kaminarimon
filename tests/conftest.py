@@ -1,3 +1,5 @@
+import base64
+
 import pytest
 
 from kaminarimon.backend import LDAPRemoteUser
@@ -41,3 +43,10 @@ def valid_service_username():
 @pytest.fixture
 def invalid_service_username():
     return "foo"
+
+
+@pytest.fixture
+def basic_auth_header():
+    credentials = "admin:password"
+    encoded_credentials = base64.b64encode(credentials.encode("utf-8")).decode("utf-8")
+    return f"Basic {encoded_credentials}"

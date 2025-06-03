@@ -4,9 +4,9 @@ from rest_framework import status
 pytestmark = pytest.mark.unit
 
 
-def test_cookies(admin_client, live_server):
+def test_cookies(client, admin_user, live_server, basic_auth_header):
     # set cookie
-    r = admin_client.get("/auth/token")
+    r = client.get("/auth/token", HTTP_AUTHORIZATION=basic_auth_header)
 
     assert r.status_code == status.HTTP_200_OK
 
@@ -17,20 +17,20 @@ def test_cookies(admin_client, live_server):
     assert cookie["httponly"]
     assert cookie["samesite"] == "Strict"
 
-    r = admin_client.get("/auth/token/refresh")
+    r = client.get("/auth/token/refresh")
     assert r.status_code == status.HTTP_200_OK
     assert r.json().get("access")
 
 
-def test_explicit_refresh(admin_client, live_server):
-    r = admin_client.get("/auth/token")
+def test_explicit_refresh(client, admin_user, live_server, basic_auth_header):
+    r = client.get("/auth/token", HTTP_AUTHORIZATION=basic_auth_header)
     assert r.status_code == status.HTTP_200_OK
     refresh = r.json()["refresh"]
 
     # delete cookie
-    del admin_client.cookies["kaminarimon_refresh"]
+    del client.cookies["kaminarimon_refresh"]
 
     # explicit refresh token
-    r = admin_client.post("/auth/token/refresh", data={"refresh": refresh})
+    r = client.post("/auth/token/refresh", data={"refresh": refresh})
     assert r.status_code == status.HTTP_200_OK
     assert r.json().get("access")

@@ -17,6 +17,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "kaminarimon",
     "tests.cookie_test_app",
+    "rest_framework_simplejwt",
+    "rest_framework",
 ]
 
 MIDDLEWARE = [
@@ -38,6 +40,15 @@ DATABASES = {
         "ENGINE": "django.db.backends.sqlite3",
         "CONN_MAX_AGE": 120,
     }
+}
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
 }
 
 AUTH_LDAP_SERVER_URI = "ldap://127.0.0.1:6969"

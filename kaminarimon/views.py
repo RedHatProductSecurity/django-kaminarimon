@@ -80,6 +80,8 @@ def krb5_obtain_token_pair_view(request: Request) -> Response:
     ),
 )
 @api_view(["GET", "POST"])
+@authentication_classes(())
+@permission_classes(())
 def refresh_token(request: Request) -> Response:
     if request.method == "GET":
         data = {"refresh": request.COOKIES.get("kaminarimon_refresh")}

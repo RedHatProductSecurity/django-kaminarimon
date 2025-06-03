@@ -1,7 +1,8 @@
 from datetime import datetime, timedelta, timezone
 
 from django.conf import settings
-from drf_spectacular.utils import extend_schema, extend_schema_view
+from drf_spectacular.utils import (OpenApiRequest, OpenApiResponse,
+                                   extend_schema, extend_schema_view)
 from rest_framework import status
 from rest_framework.decorators import (api_view, authentication_classes,
                                        permission_classes)
@@ -71,9 +72,16 @@ def krb5_obtain_token_pair_view(request: Request) -> Response:
                 },
             }
         }
-    )
+    ),
+    post=extend_schema(
+        description="Takes a refresh type JSON web token and returns an access type JSON web token if the refresh token is valid.",
+        request=OpenApiRequest(request=TokenRefreshSerializer),
+        responses={"200": OpenApiResponse(response=TokenRefreshSerializer)},
+    ),
 )
 @api_view(["GET", "POST"])
+@authentication_classes(())
+@permission_classes(())
 def refresh_token(request: Request) -> Response:
     if request.method == "GET":
         data = {"refresh": request.COOKIES.get("kaminarimon_refresh")}

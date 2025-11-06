@@ -1,11 +1,20 @@
 import socket
+from typing import Optional, TypeVar
 
+from django.contrib.auth.models import AbstractBaseUser
 import kerberos
 from django.conf import settings
 from django.contrib.auth import authenticate
 from drf_spectacular.extensions import OpenApiAuthenticationExtension
 from rest_framework import authentication
 from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.request import Request
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework_simplejwt.models import TokenUser
+from rest_framework_simplejwt.tokens import Token
+
+
+AuthUser = TypeVar("AuthUser", AbstractBaseUser, TokenUser)
 
 
 class KerberosAuthentication(authentication.BaseAuthentication):
@@ -66,3 +75,10 @@ class KerberosAuthenticationScheme(OpenApiAuthenticationExtension):
             "scheme": "negotiate",
             "in": "header",
         }
+
+
+class MiddlewareJWTAuthentication(JWTAuthentication):
+    def authenticate(self, request: Request) -> Optional[tuple[AuthUser, Token]]:
+        user = request._request.user
+        if user.is_authenticated:
+            return (user, None)

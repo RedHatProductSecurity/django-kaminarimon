@@ -25,6 +25,8 @@ MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "kaminarimon.middleware.JWTAuthenticationMiddleware",
+    "tests.cookie_test_app.middleware.TestUserMiddleware",
 ]
 
 AUTHENTICATION_BACKENDS = [

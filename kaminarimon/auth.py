@@ -64,5 +64,4 @@ class KerberosAuthenticationScheme(OpenApiAuthenticationExtension):
         return {
             "type": "http",
             "scheme": "negotiate",
-            "in": "header",
         }

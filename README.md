@@ -63,6 +63,27 @@ In order to protect other views with such authentication tokens, simply mark the
 authentication method as `rest_framework_simplejwt.authentication.JWTAuthentication`
 or similar as, or set it globally using `DEFAULT_AUTHENTICATION_CLASSES`.
 
+### Middleware-based authentication
+
+`django-restframework` and `drf-simplejwt` provide view-based authentication,
+meaning that by default authentication is handled by DRF _after_ middleware has
+run. This is usually not a big issue unless you have other middleware that
+requires accessing e.g. the user object, this can happen when doing traceability
+and you want to log the currently logged-in user for every request.
+
+`django-kaminarimon` provides a way to authenticate the user using the
+authentication class from `drf-simplejwt` in middleware, meaning that
+request.user gets populated before reaching the corresponding DRF view.
+
+The DRF view won't count the user as authenticated unless it also uses
+the accompanying authentication class which can be set per-view or in
+`DEFAULT_AUTHENTICATION_CLASSES`, like with any other DRF authentication
+class.
+
+To enable, add `kaminarimon.middleware.JWTAuthenticationMiddleware` to your
+Django settings and `kaminarimon.auth.MiddlewareJWTAuthentication` either to
+your `DEFAULT_AUTHENTICATION_CLASSES` or to individual views.
+
 ## Browser-based applications
 
 If your service will be used by browser-based applications and security of tokens

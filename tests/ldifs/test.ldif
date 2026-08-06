@@ -4,54 +4,55 @@ version: 1
 # top level
 #################
 
-dn: dc=redhat,dc=com
-dc: redhat
+dn: dc=ipa,dc=redhat,dc=com
+dc: ipa
 o: example
 objectclass: dcObject
 objectclass: organization
 
-dn: ou=users,dc=redhat,dc=com
-objectclass: organizationalUnit
-ou: users
+dn: cn=accounts,dc=ipa,dc=redhat,dc=com
+cn: accounts
+objectclass: organizationalRole
 
-dn: ou=serviceaccounts,dc=redhat,dc=com
-objectclass: organizationalUnit
-ou: serviceaccounts
+dn: cn=users,cn=accounts,dc=ipa,dc=redhat,dc=com
+cn: users
+objectclass: organizationalRole
+
+dn: cn=groups,cn=accounts,dc=ipa,dc=redhat,dc=com
+cn: groups
+objectclass: organizationalRole
 
 #################
 # Users
 #################
 
-dn: cn=testuser,ou=users,dc=redhat,dc=com
-cn: User01
+dn: uid=testuser,cn=users,cn=accounts,dc=ipa,dc=redhat,dc=com
 cn: testuser
-gidnumber: 1000
 givenName: Monke
-homedirectory: /home/testuser
-mail: monke@banana.com
-objectclass: inetOrgPerson
-objectclass: posixAccount
-objectclass: shadowAccount
 sn: Perlis
 uid: testuser
-uidnumber: 1000
+mail: monke@banana.com
+objectclass: inetOrgPerson
 userpassword: password
 
 #################
 # Service accounts
 #################
 
-dn: cn=testservice,ou=serviceaccounts,dc=redhat,dc=com
-cn: Service1
+dn: uid=testservice,cn=users,cn=accounts,dc=ipa,dc=redhat,dc=com
 cn: testservice
-gidnumber: 2000
 givenName: silenceawarning
-homedirectory: /home/testservice
-mail: silenceawarning
-objectclass: inetOrgPerson
-objectclass: posixAccount
-objectclass: shadowAccount
 sn: Faker
 uid: testservice
-uidnumber: 2000
+mail: silenceawarning
+objectclass: inetOrgPerson
 userpassword: password
+
+#################
+# Groups
+#################
+
+dn: cn=testgroup,cn=groups,cn=accounts,dc=ipa,dc=redhat,dc=com
+cn: testgroup
+objectclass: groupOfNames
+member: uid=testuser,cn=users,cn=accounts,dc=ipa,dc=redhat,dc=com

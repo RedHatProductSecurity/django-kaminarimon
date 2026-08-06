@@ -51,7 +51,12 @@ REST_FRAMEWORK = {
     ],
 }
 
-AUTH_LDAP_SERVER_URI = "ldap://127.0.0.1:6969"
+KAMINARIMON_LDAP_SERVERS = ["ldap://127.0.0.1:6969"]
+KAMINARIMON_LDAP_BIND_DN = "cn=admin,dc=ipa,dc=redhat,dc=com"
+KAMINARIMON_LDAP_BIND_PASSWORD = "adminpassword"
+LDAP_BASE_DN = "dc=ipa,dc=redhat,dc=com"
+PUBLIC_READ_GROUPS = ["testgroup"]
+SERVICE_MANAGE_GROUP = "testgroup"
 
 LANGUAGE_CODE = "en-us"
 TIME_ZONE = "UTC"

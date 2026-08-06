@@ -7,6 +7,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Simple bind fallback for test/dev environments without Kerberos
+- Hardcoded Red Hat IPA production servers as default fallback when
+  `KAMINARIMON_LDAP_SERVERS` is not set
+- `LDAP_BASE_DN` setting to configure base DN (defaults to IPA)
+- `escape_filter_chars` to LDAP search filters to prevent injection
+
+### Changed
+
+- Migrated LDAP directory from legacy Red Hat LDAP (`dc=redhat,dc=com`) to IPA
+  LDAP (`dc=ipa,dc=redhat,dc=com`)
+- Replaced anonymous LDAP bind with GSSAPI (Kerberos) as default
+  authentication method to LDAP server
+- Renamed settings:
+  - `AUTH_LDAP_SERVER_URI` (single string) → `KAMINARIMON_LDAP_SERVERS` (list)
+  - New: `KAMINARIMON_LDAP_BIND_DN`, `KAMINARIMON_LDAP_BIND_PASSWORD`
+- Single LDAP connection per authentication request instead of one per query
+- Group search uses `groupOfNames`/`member` instead of
+  `groupOfUniqueNames`/`uniqueMember`
+- User search uses `uid` attribute under `cn=users,cn=accounts` (IPA structure)
+
+### Removed
+
+- Removed service account fallback search in separate `ou=serviceaccounts`
+  container (IPA stores all accounts in `cn=users`)
+- Removed anonymous LDAP bind support
+
 ## [0.2.2] - 2026-04-07
 
 ### Fixed

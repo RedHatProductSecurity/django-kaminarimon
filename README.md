@@ -30,14 +30,10 @@ the client, signaling that it should use SPNEGO protocol for authentication.
 
 > [!NOTE]
 > A lot of the behavior of this authentication backend is currently hardcoded
-> to only work with Red Hat systems.
-
-> [!NOTE]
-> Anonymous user access to the LDAP server is required for querying user
-> information.
+> to only work with Red Hat IPA LDAP systems (`dc=ipa,dc=redhat,dc=com`).
 
 > [!WARNING]
-> Usage of LDAP authorization on its own withour Kerberos authentication is
+> Usage of LDAP authorization on its own without Kerberos authentication is
 > discouraged as it **only** handles authorization, it does not actually
 > perform any sort of authentication of the user against the LDAP server,
 > i.e. it simply loads the user's groups from the LDAP server.
@@ -45,11 +41,29 @@ the client, signaling that it should use SPNEGO protocol for authentication.
 Simply add the `kaminarimon.backend.LDAPRemoteUser` to the
 `AUTHENTICATION_BACKENDS` django setting.
 
-Required settings:
-* `AUTH_LDAP_SERVER_URI` -- URI to the LDAP server
+#### LDAP connection
+
+By default, kaminarimon connects to hardcoded Red Hat IPA production servers
+using GSSAPI (Kerberos) authentication. This can be overridden with the
+following settings:
+
+| Setting | Type | Default | Description |
+|---|---|---|---|
+| `KAMINARIMON_LDAP_SERVERS` | `list[str]` | Red Hat IPA prod servers | LDAP server URIs |
+| `KAMINARIMON_LDAP_BIND_DN` | `str` | `None` | Bind DN for simple bind (if unset, GSSAPI is used) |
+| `KAMINARIMON_LDAP_BIND_PASSWORD` | `str` | `""` | Bind password for simple bind |
+| `LDAP_BASE_DN` | `str` | `dc=ipa,dc=redhat,dc=com` | Base DN for LDAP searches |
+
+When `KAMINARIMON_LDAP_BIND_DN` is not set, kaminarimon uses GSSAPI (Kerberos)
+to authenticate to the LDAP server. When set, it uses simple bind with the
+provided DN and password. Simple bind is useful for test and development
+environments where Kerberos is not available.
+
+#### Required application settings
+
 * `PUBLIC_READ_GROUPS` -- List of names of groups that, if the user is a member of,
   grant access to the application.
-  `SERVICE_MANAGE_GROUP` -- Group that denotes a user as staff and/or superuser.
+* `SERVICE_MANAGE_GROUP` -- Group that denotes a user as staff and/or superuser.
 
 ### Intended usage (kerberos authentication, ldap authorization)
 

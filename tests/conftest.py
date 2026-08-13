@@ -2,8 +2,13 @@ import base64
 
 import pytest
 
-from kaminarimon.backend import LDAPRemoteUser
+from kaminarimon.backend import _ldap_connect, LDAPRemoteUser
 
+@pytest.fixture
+def ldap_conn():
+    conn = _ldap_connect()
+    yield conn
+    conn.unbind_s()
 
 @pytest.fixture
 def normal_user():

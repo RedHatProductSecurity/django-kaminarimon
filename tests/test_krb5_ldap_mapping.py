@@ -1,7 +1,7 @@
 import pytest
 from rest_framework.exceptions import AuthenticationFailed
 
-from kaminarimon.backend import get_user_info
+from kaminarimon.backend import get_user_info, get_ldap_groups
 
 pytestmark = pytest.mark.unit
 
@@ -30,20 +30,23 @@ class TestCleanUsername:
 
 
 class TestLDAPCommunication:
-    def test_user_info_valid_user(self, valid_user_username):
-        user_info = get_user_info(valid_user_username)
-        dn, attrs = user_info
-        assert dn == f"cn={valid_user_username},ou=users,dc=redhat,dc=com"
+    def test_user_info_valid_user(self, ldap_conn, valid_user_username):
+        dn, attrs = get_user_info(valid_user_username, ldap_conn)
+        assert dn == f"uid={valid_user_username},cn=users,cn=accounts,dc=ipa,dc=redhat,dc=com"
         assert attrs["sn"][0].decode() == "Perlis"
 
-    def test_user_info_valid_service(self, valid_service_username):
-        user_info = get_user_info(valid_service_username)
-        dn, attrs = user_info
-        assert dn == f"cn={valid_service_username},ou=serviceaccounts,dc=redhat,dc=com"
+    def test_user_info_valid_service(self, ldap_conn, valid_service_username):
+        dn, attrs = get_user_info(valid_service_username, ldap_conn)
+        assert dn == f"uid={valid_service_username},cn=users,cn=accounts,dc=ipa,dc=redhat,dc=com"
         assert attrs["sn"][0].decode() == "Faker"
 
-    def test_user_info_invalid_service(self, invalid_service_username):
+    def test_user_info_invalid_service(self, ldap_conn, invalid_service_username):
         with pytest.raises(AuthenticationFailed) as e:
-            get_user_info(invalid_service_username)
+            get_user_info(invalid_service_username, ldap_conn)
         msg = "Could not find matching LDAP account for Kerberos principal"
         assert msg == str(e.value)
+
+    def test_ldap_groups(self, ldap_conn, valid_user_username):
+        dn, _ = get_user_info(valid_user_username, ldap_conn)
+        groups = get_ldap_groups(dn, ldap_conn)
+        assert "testgroup" in groups

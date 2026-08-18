@@ -60,6 +60,10 @@ to authenticate to the LDAP server. When set, it uses simple bind with the
 provided DN and password. Simple bind is useful for test and development
 environments where Kerberos is not available.
 
+> [!IMPORTANT]
+> GSSAPI bind requires the `cyrus-sasl-gssapi` system package to be
+> installed in the runtime environment, e.g. the container image.
+
 #### Required application settings
 
 * `PUBLIC_READ_GROUPS` -- List of names of groups that, if the user is a member of,
